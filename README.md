@@ -7,6 +7,16 @@ Machine     | Orion  | Hera   | Hera   |
 ------------|--------|--------|--------|
 Compiler(s) | Intel  | Intel  | Intel  |
 
+## Build and get input data from s3 bucket
+```
+git clone --recurse-submodules -b test https://github.com/clouden90/ufs-htf.git
+cd ufs-htf
+mkdir build
+cmake ..
+cd test
+./prep.sh --platform=PLATFORM_NAME(e.g. orion) -d
+```
+
 ## How to use
 
 Currently there are 6 tests (you can type ``ctest -N`` to see the list) existed.
