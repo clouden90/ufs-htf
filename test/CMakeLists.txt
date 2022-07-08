@@ -10,8 +10,7 @@ set( obs_data
 
 #
 set( vrfy_scripts
-#  ${CMAKE_CURRENT_SOURCE_DIR}/vrfy/Barry_ws_ts.py 
-  ${CMAKE_CURRENT_SOURCE_DIR}/vrfy/Barry_track.py
+  ${CMAKE_CURRENT_SOURCE_DIR}/vrfy/TC_Tracks_error.py
 )
 
 #
@@ -28,8 +27,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
       ${CMAKE_CURRENT_SOURCE_DIR}/detect_machine.sh 
       ${CMAKE_CURRENT_BINARY_DIR}/detect_machine.sh )
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-      ${CMAKE_CURRENT_SOURCE_DIR}/run_ws_ts.sh 
-      ${CMAKE_CURRENT_BINARY_DIR}/run_ws_ts.sh )
+      ${CMAKE_CURRENT_SOURCE_DIR}/run_trk_err.sh 
+      ${CMAKE_CURRENT_BINARY_DIR}/run_trk_err.sh )
 
 # case env files 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/case)
@@ -62,37 +61,37 @@ endforeach()
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/inputdata)
 
 #
-add_test ( NAME test_build_ufs
+add_test ( NAME build_ufs
            COMMAND bash build_global-workflow.sh
            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(test_build_ufs PROPERTIES TIMEOUT 7200)
+set_tests_properties(build_ufs PROPERTIES TIMEOUT 7200)
 
 #
-add_test ( NAME test_get_ufs_fix_data
+add_test ( NAME get_ufs_fix_data
            COMMAND bash prep.sh 
            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(test_get_ufs_fix_data PROPERTIES TIMEOUT 7200)
+set_tests_properties(get_ufs_fix_data PROPERTIES TIMEOUT 7200)
 
 #
-add_test ( NAME test_ATM_c96_Barry
+add_test ( NAME ATM_c96_Barry
            COMMAND bash run_ctest.sh --app=ATM --grid=96 --case=Barry --ctest -v 
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(test_ATM_c96_Barry PROPERTIES TIMEOUT 7200)
+set_tests_properties(ATM_c96_Barry PROPERTIES TIMEOUT 7200)
 
 #
-add_test ( NAME test_S2S_c96_Barry
+add_test ( NAME S2S_c96_Barry
            COMMAND bash run_ctest.sh --app=S2S --grid=96 --case=Barry --ctest -v
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(test_S2S_c96_Barry PROPERTIES TIMEOUT 7200)
+set_tests_properties(S2S_c96_Barry PROPERTIES TIMEOUT 7200)
 
 #
-add_test ( NAME test_S2SW_c96_Barry
+add_test ( NAME S2SW_c96_Barry
            COMMAND bash run_ctest.sh --app=S2SW --grid=96 --case=Barry --ctest -v
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(test_S2SW_c96_Barry PROPERTIES TIMEOUT 7200)
+set_tests_properties(S2SW_c96_Barry PROPERTIES TIMEOUT 7200)
 
 #
-add_test ( NAME test_Barry_track
-           COMMAND bash run_ws_ts.sh
+add_test ( NAME Barry_track_err
+           COMMAND bash run_trk_err.sh 
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(test_Barry_track PROPERTIES TIMEOUT 7200)
+set_tests_properties(Barry_track_err PROPERTIES TIMEOUT 7200)
