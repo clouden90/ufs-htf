@@ -230,7 +230,8 @@ else
               --include 'global_maxice.2x2.grb' \
               --include 'RTGSST.1982.2012.monthly.clim.grb' \
               --include 'global_snoclim.1.875.grb' \
-              --include 'CFSR.SEAICE.1982.2012.monthly.clim.grb'
+              --include 'CFSR.SEAICE.1982.2012.monthly.clim.grb' \
+              --include 'IMS-NIC.blended.ice.monthly.clim.grb'
 fi
 #reanme
 if [ -f $TMP_DIR/solarconstant_noaa_an.txt ]; then
