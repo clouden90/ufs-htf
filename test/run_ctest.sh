@@ -224,7 +224,8 @@ sed -i "s#MOM6_RESTART_SETTING='n'#MOM6_RESTART_SETTING='r'#g" ${GW_DIR}/ush/par
 
 # tmp fix 100 wav
 if [ "${APP}" == "S2SW" ]; then
-  sed -i '25s/MEDPETS=300/#MEDPETS=300/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
+  sed -i 's/MEDPETS=300/#MEDPETS=300/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
+  sed -i 's/gwes_30m/mx'${ogrid}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
   sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
   sed -i 's/reg025/reg'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
   sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.resources
@@ -236,7 +237,7 @@ if [ "${CTEST}" = true ] ; then
     echo "remove ocnpost for ctest!"
     sed -i.bak -e '363,401d;460d' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/${APP}_c${GRID}_${CASE}.xml 
     # tmp fix: do not resource s2sw config!
-    sed -i '196s/source $EXPDIR\/config.defaults.s2sw/#source $EXPDIR\/config.defaults.s2sw/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.base
+    sed -i 's/source $EXPDIR\/config.defaults.s2sw/#source $EXPDIR\/config.defaults.s2sw/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.base
   elif [ "${APP}" = "S2SW" ]; then
     echo "remove ocnpost and wavepost for ctest!"
     sed -i.bak -e '392,492d;551,553d' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/${APP}_c${GRID}_${CASE}.xml
