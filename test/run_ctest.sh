@@ -225,7 +225,7 @@ sed -i "s#MOM6_RESTART_SETTING='n'#MOM6_RESTART_SETTING='r'#g" ${GW_DIR}/ush/par
 # tmp fix 100 wav
 if [ "${APP}" == "S2SW" ]; then
   sed -i 's/MEDPETS=300/#MEDPETS=300/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
-  sed -i 's/gwes_30m/mx'${ogrid}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
+  sed -i 's/gwes_30m/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
   sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
   sed -i 's/reg025/reg'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.defaults.s2sw
   sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.resources
