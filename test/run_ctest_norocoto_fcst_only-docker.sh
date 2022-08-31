@@ -128,8 +128,9 @@ done
 set -eu
 
 # detect platform
-source detect_machine.sh
-load_module
+# we are running inside docker container
+#source detect_machine.sh
+#load_module
 
 #check if we want to load user defined variables
 if [ -z $CASE ]; then
@@ -152,6 +153,8 @@ if [ ${GRID} != "384" ]; then
   else
     echo "First time! remove ocnpost and wavepost for ctest for C96 case!"
     sed -i.bak -e '464,465d;476d' ${GW_DIR}/workflow/applications.py
+    cp ${ROOT_DIR}/docker/hosts.py ${GW_DIR}/workflow/
+    cp ${ROOT_DIR}/docker/docker.yaml ${GW_DIR}/workflow/hosts/
   fi
 fi
 
@@ -173,6 +176,28 @@ printf 'y\ny\n' | ${GW_DIR}/workflow/setup_expt.py forecast-only --app ${APP} --
 
 # now modify config.base file based on user-defined variables
 mkdir -p $TEST_DIR/archive
+if [ -f ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh.bak ]; then
+   echo "find ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh.bak! do nothing!"	  
+else
+   echo "backup ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh!"
+   cp ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh.bak
+   cp ${ROOT_DIR}/global-workflow/ush/parsing_namelists_FV3.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_FV3.sh.bak
+   cp ${ROOT_DIR}/global-workflow/ush/parsing_namelists_MOM6.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_MOM6.sh.bak
+   cp ${ROOT_DIR}/global-workflow/ush/parsing_namelists_CICE.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_CICE.sh.bak
+fi     
+if [ ${GRID} != "48" ]; then
+   cp ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh.bak ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh
+   cp ${ROOT_DIR}/global-workflow/ush/parsing_namelists_FV3.sh.bak ${ROOT_DIR}/global-workflow/ush/parsing_namelists_FV3.sh
+   cp ${ROOT_DIR}/global-workflow/ush/parsing_namelists_MOM6.sh.bak ${ROOT_DIR}/global-workflow/ush/parsing_namelists_MOM6.sh
+   cp ${ROOT_DIR}/global-workflow/ush/parsing_namelists_CICE.sh.bak ${ROOT_DIR}/global-workflow/ush/parsing_namelists_CICE.sh
+else
+   cp ${ROOT_DIR}/docker/forecast_postdet.sh ${ROOT_DIR}/global-workflow/ush/forecast_postdet.sh
+   cp ${ROOT_DIR}/docker/parsing_namelists_FV3.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_FV3.sh
+   cp ${ROOT_DIR}/docker/parsing_namelists_MOM6.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_MOM6.sh
+   cp ${ROOT_DIR}/docker/parsing_namelists_CICE.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_CICE.sh
+fi       	
+cp ${ROOT_DIR}/docker/MOM_input_template_500 ${ROOT_DIR}/global-workflow/parm/mom6/MOM_input_template_500
+cp ${ROOT_DIR}/docker/config.resources ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/
 sed -i -r "s#^(export STMP=).*#\1$TEST_DIR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
 sed -i -r "s#^(export HOMEDIR=).*#\1$TEST_DIR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
 sed -i -r "s#^(export DO_METP=).*#\1$METP#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
@@ -188,6 +213,7 @@ sed -i -r "s#^(export QUEUE_SERVICE=).*#\1$_QUEUE#" ${TEST_DIR}/expdir/${APP}_c$
 sed -i -r "s#^(export PARTITION_BATCH=).*#\1$_PARTITION_BATCH#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
 #output
 sed -i -r "s#^(export FHOUT_GFS=).*#\1$_FHOUT_GFS#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+sed -i -r "s#^(export QUILTING=).*#\1$_QUILTING#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
 #sed -i -r "s#^(export ARCH_GAUSSIAN_FHINC=).*#\1$_ARCH_GAUSSIAN_FHINC#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.arch
 
 #change wall-time
@@ -199,8 +225,16 @@ sed -i 's/06:00:00/00:30:00/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_noroco
 # link ufs_model
 ln -fs  ${GW_DIR}/sorc/ufs_model.fd/build/ufs_model ${GW_DIR}/exec/
 
+# tmp fix for cpld ic & resource
+sed -i 's/OCNRES=400/OCNRES=500/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+sed -i 's/$CRTM_FIX/"\/lustre"/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+sed -i 's/ORION/DOCKER/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.coupled_ic
+sed -i 's/ORION/DOCKER/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
+#sed -i 's/OCNPETS=20/OCNPETS=10/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
+cp ${ROOT_DIR}/docker/config.fv3 ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/
+
 # 
-${GW_DIR}/workflow/setup_xml.py ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto
+#${GW_DIR}/workflow/setup_xml.py ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto
 
 # check if inputdata is existed TODO: download examples from somewhere? 
 if [[ -f ${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR}/atmos/C${GRID}/INPUT/gfs_ctrl.nc ]]; then
@@ -219,6 +253,8 @@ if [ ${GRID} = "96" ]; then
   oGRID=100
 elif [ ${GRID} = "192" ]; then
   oGRID=050
+elif [ ${GRID} = "48" ]; then
+  oGRID=500	
 else
   oGRID=025
 fi
@@ -242,7 +278,7 @@ sed -i "s#MOM6_RESTART_SETTING='n'#MOM6_RESTART_SETTING='r'#g" ${GW_DIR}/ush/par
 
 # tmp fix 100 wav
 if [ "${APP}" == "S2SW" ]; then
-  if [ ${GRID} = "96" ]; then
+  if [[ ("${GRID}" == "96") || ("${GRID}" == "48") ]]; then
   sed -i 's/MEDPETS=300/#MEDPETS=300/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
   sed -i 's/gwes_30m/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
   sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
@@ -268,15 +304,19 @@ if [ "${CTEST}" = true ] ; then
   export CDATE="${SYEAR}${SMONTH}${SDAY}${SHR}"
   export PDY="${SYEAR}${SMONTH}${SDAY}"
   export cyc="${SHR}"
+  export OMPI_MCA_btl_vader_single_copy_mechanism=none
+  #
   . ${EXPDIR}/config.base
   . ${EXPDIR}/config.fcst
   echo "NTASKS_TOT = ${npe_fcst_gfs}"
   echo "ntasks-per-node = ${npe_node_fcst_gfs}"
   export fcst_node=$(echo "$npe_fcst_gfs / $npe_node_fcst_gfs + 1" | bc)
   #
-  [ -f ./job_card ] && rm job_card
   [ -f ./out ] && rm out
   [ -f ./err ] && rm err
+  ${GW_DIR}/jobs/rocoto/fcst.sh > out 2> err &
+  #
+  [ -f ./job_card ] && rm job_card
 cat > job_card<<EOF
 #!/bin/sh
 #SBATCH -e err
@@ -299,14 +339,15 @@ export CDUMP="gfs"
 export CDATE="${SYEAR}${SMONTH}${SDAY}${SHR}"
 export PDY="${SYEAR}${SMONTH}${SDAY}"
 export cyc="${SHR}"
+export OMPI_MCA_btl_vader_single_copy_mechanism=none
 #
 . ${EXPDIR}/config.base
 #run fcst
 ${GW_DIR}/jobs/rocoto/fcst.sh
 EOF
 #
-  # submit job
-  sbatch job_card
+#  # submit job
+#  sbatch job_card
   sleep 30
   #
   #OUTPUT=$(grep "End fcst.sh" ./out)
