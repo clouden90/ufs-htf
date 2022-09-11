@@ -23,18 +23,18 @@ User can run toy example with docker container on NOAA cloud (e.g. AWS). It requ
 
 User can follow the follwoing command to run toy example using docker on NOAA cloud:
 ```console
-$ cd /lustre
-$ git clone -b docker https://github.com/clouden90/ufs-htf.git
-$ sudo systemctl start docker
-$ sudo docker run --rm -v /lustre:/lustre clouden90/ubuntu20.04-spack-htf:latest /bin/bash -c 'cd /lustre/ufs-htf && \
+cd /lustre
+git clone -b docker https://github.com/clouden90/ufs-htf.git
+sudo systemctl start docker
+sudo docker run --rm -v /lustre:/lustre clouden90/ubuntu20.04-spack-htf:latest /bin/bash -c "cd /lustre/ufs-htf && \
           git pull && \
           git submodule update --init --recursive && \
           source docker/launch.sh && \
           mkdir build && cd build && \
           cmake .. && \
-          ctest'
+          ctest"
 ```
 Or you can try `run_toy.sh` script:
 ```console
-$ sudo docker run --rm clouden90/ubuntu20.04-spack-htf:latest /bin/bash -c 'bash ./docker/recipe/run_toy.sh'
+sudo docker run --rm clouden90/ubuntu20.04-spack-htf:latest /bin/bash -c "bash ./docker/recipe/run_toy.sh"
 ```
