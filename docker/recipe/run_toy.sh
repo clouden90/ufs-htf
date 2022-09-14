@@ -8,6 +8,7 @@ ROOT_DIR="$(dirname $(dirname "$SCRIPT_DIR"))"
 cd ${ROOT_DIR}
 
 #
+git config --global --add safe.directory /home/builder/ufs-htf
 git branch
 git pull && git submodule update --init --recursive
 

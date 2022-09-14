@@ -36,7 +36,7 @@ WORK_DIR=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
 echo $WORK_DIR
 
 # firt install aws-cli
-python3 -m pip install numpy pyyaml
+python3 -m pip install numpy pyyaml awscli
 #if [ -d "${HOME}/aws-cli" ]; then
 #  echo "aws-cli existed" 
 #else
