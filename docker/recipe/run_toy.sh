@@ -23,5 +23,11 @@ cmake ..
 # test ufs-wm build
 ctest -VV -R docker_build_ufs
 
+# staging data
+ctest -VV -R docker_stage_ufs_data
+
+# ufs ATM_c48_toy
+ctest -VV -R docker_ATM_c48_toy
+
 #
 exit 0
