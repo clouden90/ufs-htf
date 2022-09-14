@@ -8,14 +8,18 @@ ROOT_DIR="$(dirname $(dirname "$SCRIPT_DIR"))"
 cd ${ROOT_DIR}
 
 #
-git pull && git submodule update --init --recursive
+git config --global --add safe.directory /home/builder/ufs-htf
+#git branch
+#git pull
+git submodule update --init --recursive
 
 #
 source ./docker/launch.sh
 pip3 install numpy pyyaml
 
 #
-mkdir build && cd build
+mkdir build
+cd build
 
 #
 cmake ..
@@ -24,4 +28,28 @@ cmake ..
 ctest -VV -R docker_build_ufs
 
 #
-exit 0
+if [ $? -ne 0 ]; then
+   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+   echo "docker_build_ufs FAIL"
+   exit 1
+fi
+
+# staging data
+# ctest -VV -R docker_stage_ufs_data
+
+#
+#if [ $? -ne 0 ]; then
+#   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+#   echo "docker_stage_ufs_data FAIL"
+#   exit 1
+#fi
+
+# ufs ATM_c48_toy
+# ctest -VV -R docker_ATM_c48_toy
+
+#
+#if [ $? -ne 0 ]; then
+#   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+#   echo "docker_docker_ATM_c48_toy FAIL"
+#   exit 1
+#fi

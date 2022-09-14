@@ -129,6 +129,7 @@ set -eu
 
 # detect platform
 # we are running inside docker container
+source ${ROOT_DIR}/docker/launch.sh
 #source detect_machine.sh
 #load_module
 
