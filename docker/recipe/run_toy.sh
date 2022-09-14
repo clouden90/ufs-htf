@@ -18,7 +18,8 @@ source ./docker/launch.sh
 pip3 install numpy pyyaml
 
 #
-mkdir build && cd build
+mkdir build
+cd build
 
 #
 cmake ..
@@ -26,11 +27,29 @@ cmake ..
 # test ufs-wm build
 ctest -VV -R docker_build_ufs
 
+#
+if [ $? -ne 0 ]; then
+   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+   echo "docker_build_ufs FAIL"
+   exit 1
+fi
+
 # staging data
 # ctest -VV -R docker_stage_ufs_data
+
+#
+#if [ $? -ne 0 ]; then
+#   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+#   echo "docker_stage_ufs_data FAIL"
+#   exit 1
+#fi
 
 # ufs ATM_c48_toy
 # ctest -VV -R docker_ATM_c48_toy
 
 #
-exit 0
+#if [ $? -ne 0 ]; then
+#   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+#   echo "docker_docker_ATM_c48_toy FAIL"
+#   exit 1
+#fi
