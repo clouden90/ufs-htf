@@ -9,8 +9,9 @@ cd ${ROOT_DIR}
 
 #
 git config --global --add safe.directory /home/builder/ufs-htf
-git branch
-git pull && git submodule update --init --recursive
+#git branch
+#git pull
+git submodule update --init --recursive
 
 #
 source ./docker/launch.sh
