@@ -25,6 +25,9 @@ User can follow the follwoing command to run toy example using docker on NOAA cl
 ```console
 cd ~/
 sudo systemctl start docker
+git clone -b jenkins https://github.com/clouden90/ufs-htf.git
+cd ufs-htf
+sudo docker build -t clouden90/ubuntu20.04-gnu9.3-hpc-stack-htf:latest -f ./docker/recipe/Dockerfile.ubuntu20.04-gnu9.3-hpc-stack-htf-jenkins .
 sudo docker run --rm clouden90/ubuntu20.04-gnu9.3-hpc-stack-htf:latest /bin/bash -c "bash ./docker/recipe/run_toy.sh"
 ```
 A simple Jenkinsfile to run ctest build_ufs with Jenkins is also provided.

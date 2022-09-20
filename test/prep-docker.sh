@@ -32,7 +32,8 @@ done
 set -eu
 
 #get fix data from s3 for ufs test case
-WORK_DIR=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
+WORK_DIR=$(pwd)
+CURR_DIR=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
 echo $WORK_DIR
 
 # firt install aws-cli
@@ -392,8 +393,8 @@ fi
 
 # gen link
 if [ -z $GW_DIR ]; then
-  echo "path of global workflow is not given, use default path: ${WORK_DIR}/../../global-workflow/"
-  GW_DIR=${WORK_DIR}/../../global-workflow
+  echo "path of global workflow is not given, use default path: ${CURR_DIR}/../global-workflow/"
+  GW_DIR=${CURR_DIR}/../global-workflow
   ln -fs ${WORK_DIR}/fix_new/fix_* ${GW_DIR}/fix/
 else
   echo global workflow is located: ${GW_DIR}

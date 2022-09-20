@@ -9,4 +9,4 @@ module load pio gftl-shared yafyaml
 module load mapl/2.22.0-esmf-v8.3.0b09
 module load prod_util
 export PATH=/home/builder/miniconda/bin:$PATH
-export PATH=/home/builder/.local/bin:$PATH
+#export PATH=/home/builder/.local/bin:$PATH
