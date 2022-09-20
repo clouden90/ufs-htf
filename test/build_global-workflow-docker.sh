@@ -37,9 +37,12 @@ build_option+=" ${build_ufs_option}"
 # set current and working paths ---------------------------------------------------
 echo "current path" $(pwd);
 CUR_PWD=$(pwd)
-cd ../../global-workflow/sorc; WRK_PWD=$(pwd)
+SCRIPT_DIR=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+cd ${ROOT_DIR}/global-workflow/sorc; WRK_PWD=$(pwd)
 
 # checkout components -------------------------------------------------------------
+sed -i 's/Prototype-P8/develop/g' checkout.sh 
 bash checkout.sh                                                                                                                               
 
 # turn off build options -------------------------------------------------------                                                                                                                   
@@ -57,9 +60,10 @@ else
    cp ./gfs_build.cfg ./gfs_build.cfg.bak
    cp ./build_ufs.sh ./build_ufs.sh.bak
    echo "cp gfs_build.cfg from docker folder!"   
-   cp ../../docker/gfs_build.cfg ./
-   cp ../../docker/build_ufs.sh  ./
-   cp ../../docker/DOCKER.env ../env/ 
+   cp ${ROOT_DIR}/docker/gfs_build.cfg ./
+   cp ${ROOT_DIR}/docker/build_ufs.sh  ./
+   cp ${ROOT_DIR}/docker/DOCKER.env ${ROOT_DIR}/global-workflow/env/
+   ln -fs ${ROOT_DIR}/docker/parsing_namelists_CICE.sh.develop ${ROOT_DIR}/docker/parsing_namelists_CICE.sh 
 fi
 bash build_all.sh $build_option                                                                                                                       
 #logfile="logs/build_ufs.log"

@@ -37,7 +37,9 @@ build_option+=" ${build_ufs_option}"
 # set current and working paths ---------------------------------------------------
 echo "current path" $(pwd);
 CUR_PWD=$(pwd)
-cd ../../global-workflow/sorc; WRK_PWD=$(pwd)
+SCRIPT_DIR=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
+ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+cd ${ROOT_DIR}/global-workflow/sorc; WRK_PWD=$(pwd)
 
 # checkout components -------------------------------------------------------------
 sh checkout.sh                                                                                                                               
@@ -48,6 +50,9 @@ sh checkout.sh
 #sed -i '7s/yes/no/g' gfs_build.cfg
 #sed -i '8s/yes/no/g' gfs_build.cfg
 #sed -i '11s/yes/no/g' gfs_build.cfg
+
+#
+ln -fs ${ROOT_DIR}/docker/parsing_namelists_CICE.sh.P8 ${ROOT_DIR}/docker/parsing_namelists_CICE.sh
 
 # build and link components -------------------------------------------------------                                                           
 sh build_all.sh $build_option                                                                                                                       

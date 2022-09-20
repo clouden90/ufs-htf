@@ -29,25 +29,25 @@ set( ncl_files
 )
 
 #
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/build_global-workflow.sh
       ${CMAKE_CURRENT_BINARY_DIR}/build_global-workflow.sh )
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/build_global-workflow-docker.sh
       ${CMAKE_CURRENT_BINARY_DIR}/build_global-workflow-docker.sh )
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/prep.sh 
       ${CMAKE_CURRENT_BINARY_DIR}/prep.sh )
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/prep-docker.sh
       ${CMAKE_CURRENT_BINARY_DIR}/prep-docker.sh )
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/run_ctest.sh
       ${CMAKE_CURRENT_BINARY_DIR}/run_ctest.sh )
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/run_ctest_norocoto_fcst_only.sh 
       ${CMAKE_CURRENT_BINARY_DIR}/run_ctest_norocoto_fcst_only.sh )
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
       ${CMAKE_CURRENT_SOURCE_DIR}/run_ctest_norocoto_fcst_only-docker.sh
       ${CMAKE_CURRENT_BINARY_DIR}/run_ctest_norocoto_fcst_only-docker.sh )
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
