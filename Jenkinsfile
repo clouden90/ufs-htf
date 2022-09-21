@@ -26,7 +26,7 @@ pipeline {
         stage('test spack-stack ufs-wm build') {
             steps {
                 echo "test spack-stack ufs-wm build"
-                sh 'docker run --user root --rm clouden90/ubuntu20.04-gnu9.3-spack-stack-htf-jenkins:test /bin/bash -c "bash ./docker/recipe/run_toy.sh"'
+                //sh 'docker run --user root --rm clouden90/ubuntu20.04-gnu9.3-spack-stack-htf-jenkins:test /bin/bash -c "bash ./docker/recipe/run_toy.sh"'
             }
         }
 
