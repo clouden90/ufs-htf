@@ -306,6 +306,7 @@ if [ "${CTEST}" = true ] ; then
   export CDATE="${SYEAR}${SMONTH}${SDAY}${SHR}"
   export PDY="${SYEAR}${SMONTH}${SDAY}"
   export cyc="${SHR}"
+  [[ -d /home/builder/spack-stack ]] && export NETCDF="/home/builder/spack-stack/envs/ufs-srw-dev.docker_gnu/install/gcc/9.4.0/netcdf-c-4.7.4-si4gecs"
   export OMPI_MCA_btl_vader_single_copy_mechanism=none
   #
   . ${EXPDIR}/config.base

@@ -15,7 +15,7 @@ git submodule update --init --recursive
 
 #
 source ./docker/launch.sh
-pip3 install numpy pyyaml awscli
+pip3 install numpy awscli
 
 #
 mkdir build

@@ -37,9 +37,13 @@ CLEAN_AFTER=NO
 source $cwd/../../docker/launch.sh
 [[ -d build ]] && rm -rf build
 mkdir build && cd build
+[[ -d /home/builder/spack-stack ]] && sed -i 's/DEPENDENCIES MAPL/DEPENDENCIES esmf MAPL/g' $cwd/ufs_model.fd/GOCART/ESMF/Shared/CMakeLists.txt
 cmake $MAKE_OPT -DINLINE_POST=ON ..
-#sed -i 's/-lESMF//g' CMakeFiles/ufs_model.dir/link.txt
-#sed -i 's/\blibpioc.a\b/& \/opt\/spack-stack\/envs\/ufs-srw.intel\/install\/intel\/2021.6.0\/parallel-netcdf-1.12.2-vocfk5o\/lib\/libpnetcdf.so.4/' CMakeFiles/ufs_model.dir/link.txt
+#
+if [[ -d /home/builder/spack-stack ]]; then
+  sed -i 's/-lESMF//g' $cwd/ufs_model.fd/build/CMakeFiles/ufs_model.dir/link.txt
+  sed -i 's/\blibpioc.a\b/& \/home\/builder\/spack-stack\/envs\/ufs-srw-dev.docker_gnu\/install\/gcc\/9.4.0\/parallel-netcdf-1.12.2-r4lshlx\/lib\/libpnetcdf.so.4/' $cwd/ufs_model.fd/build/CMakeFiles/ufs_model.dir/link.txt
+fi
 OMP_NUM_THREADS=1 make -j ${BUILD_JOBS:-4} VERBOSE=${BUILD_VERBOSE:-}
 mv ufs_model ../tests/fv3_${COMPILE_NR}.exe
 cd ..
