@@ -13,7 +13,7 @@ OPTIONS
   --grid=GRID
       GRID; default is 96
       (e.g. 96)
-  --case=CASE
+  --case=_CASE
       cases selected from ufs case studies
   --gw_path=GW_DIR
   --ctest
@@ -29,7 +29,7 @@ cat << EOF_SETTINGS
 Settings:
   APP=${APP}
   GRID=${GRID}
-  CASE=${CASE}
+  CASE=${_CASE}
   PLATFORM=${PLATFORM}
   TEST_DIR=${TEST_DIR}
   GW_DIR=${GW_DIR}
@@ -74,7 +74,7 @@ GW_DIR=${ROOT_DIR}/global-workflow
 TEST_DIR=$(pwd)
 APP="ATM"
 GRID="96"
-CASE=""
+_CASE=""
 PLATFORM=""
 #CCPP_SUITE="FV3_GFS_v17_coupled_p8"
 VERBOSE=false
@@ -112,7 +112,7 @@ while :; do
     --app|--app=) usage_error "$1 requires argument." ;;
     --grid=?*) GRID=${1#*=} ;;
     --grid|--grid=) usage_error "$1 requires argument." ;;
-    --case=?*) CASE=${1#*=} ;;
+    --case=?*) _CASE=${1#*=} ;;
     --case|--case=) usage_error "$1 requires argument." ;;
     --gw_path=?*) GW_DIR=${1#*=} ;;
     --gw_path|--gw_path=) usage_error "$1 requires argument." ;;
@@ -135,12 +135,12 @@ source ${ROOT_DIR}/docker/launch.sh
 #load_module
 
 #check if we want to load user defined variables
-if [ -z $CASE ]; then
+if [ -z $_CASE ]; then
   printf "\nWarning: case is not set, use default variables!\n\n"
-  CASE="default"
+  _CASE="toy"
 else
-  printf "\n case ${CASE} is selected, load case-specific variables now!\n\n"
-  source ${TEST_DIR}/case/$CASE.env
+  printf "\n case ${_CASE} is selected, load case-specific variables now!\n\n"
+  source ${TEST_DIR}/case/$_CASE.env
 fi
 
 # print settings
@@ -163,12 +163,12 @@ fi
 # tmp for S2SWA case: too slow, reduce fcst hrs to 6
 if [ "${APP}" == "S2SWA" ]; then
    export FCST_HR="6"
-   [ -d "${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}" ] && rm -rf ${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}
+   [ -d "${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}" ] && rm -rf ${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}
 fi
 
 # now run setup scripts to generate experiment
 # now only support fcst mode
-printf 'y\ny\n' | ${GW_DIR}/workflow/setup_expt.py forecast-only --app ${APP} --pslot ${APP}_c${GRID}_${CASE}_norocoto \
+printf 'y\ny\n' | ${GW_DIR}/workflow/setup_expt.py forecast-only --app ${APP} --pslot ${APP}_c${GRID}_${_CASE}_norocoto \
                                                  --idate ${SYEAR}${SMONTH}${SDAY}${SHR} \
                                                  --edate ${SYEAR}${SMONTH}${SDAY}${SHR} \
                                                  --resdet ${GRID} \
@@ -199,52 +199,52 @@ else
    cp ${ROOT_DIR}/docker/parsing_namelists_CICE.sh ${ROOT_DIR}/global-workflow/ush/parsing_namelists_CICE.sh
 fi       	
 cp ${ROOT_DIR}/docker/MOM_input_template_500 ${ROOT_DIR}/global-workflow/parm/mom6/MOM_input_template_500
-cp ${ROOT_DIR}/docker/config.resources ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/
-sed -i -r "s#^(export STMP=).*#\1$TEST_DIR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export HOMEDIR=).*#\1$TEST_DIR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export DO_METP=).*#\1$METP#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export DO_GLDAS=).*#\1$GLDAS#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export FHMAX_GFS_00=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export FHMAX_GFS_06=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export FHMAX_GFS_12=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export FHMAX_GFS_18=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+cp ${ROOT_DIR}/docker/config.resources ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/
+sed -i -r "s#^(export STMP=).*#\1$TEST_DIR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export HOMEDIR=).*#\1$TEST_DIR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export DO_METP=).*#\1$METP#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export DO_GLDAS=).*#\1$GLDAS#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export FHMAX_GFS_00=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export FHMAX_GFS_06=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export FHMAX_GFS_12=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export FHMAX_GFS_18=).*#\1$FCST_HR#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
 #resources
-sed -i -r "s#^(export ACCOUNT=).*#\1$_ACCOUNT#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export QUEUE=).*#\1$_QUEUE#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export QUEUE_SERVICE=).*#\1$_QUEUE#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export PARTITION_BATCH=).*#\1$_PARTITION_BATCH#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+sed -i -r "s#^(export ACCOUNT=).*#\1$_ACCOUNT#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export QUEUE=).*#\1$_QUEUE#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export QUEUE_SERVICE=).*#\1$_QUEUE#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export PARTITION_BATCH=).*#\1$_PARTITION_BATCH#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
 #output
-sed -i -r "s#^(export FHOUT_GFS=).*#\1$_FHOUT_GFS#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i -r "s#^(export QUILTING=).*#\1$_QUILTING#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+sed -i -r "s#^(export FHOUT_GFS=).*#\1$_FHOUT_GFS#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i -r "s#^(export QUILTING=).*#\1$_QUILTING#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
 #sed -i -r "s#^(export ARCH_GAUSSIAN_FHINC=).*#\1$_ARCH_GAUSSIAN_FHINC#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}/config.arch
 
 #change wall-time
-sed -i -r "s#(export wtime_fcst_gfs=).*#\1${_wtime_fcst_gfs}#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
-sed -i -r "s#(export wtime_post_gfs=).*#\1${_wtime_post_gfs}#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
-sed -i -r "s#(export wtime_vrfy_gfs=).*#\1${_wtime_vrfy_gfs}#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
-sed -i 's/06:00:00/00:30:00/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
+sed -i -r "s#(export wtime_fcst_gfs=).*#\1${_wtime_fcst_gfs}#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
+sed -i -r "s#(export wtime_post_gfs=).*#\1${_wtime_post_gfs}#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
+sed -i -r "s#(export wtime_vrfy_gfs=).*#\1${_wtime_vrfy_gfs}#" ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
+sed -i 's/06:00:00/00:30:00/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
 
 # link ufs_model
 ln -fs  ${GW_DIR}/sorc/ufs_model.fd/build/ufs_model ${GW_DIR}/exec/
 
 # tmp fix for cpld ic & resource
-sed -i 's/OCNRES=400/OCNRES=500/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i 's/$CRTM_FIX/"\/lustre"/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
-sed -i 's/ORION/DOCKER/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.coupled_ic
-sed -i 's/ORION/DOCKER/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
-#sed -i 's/OCNPETS=20/OCNPETS=10/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
-cp ${ROOT_DIR}/docker/config.fv3 ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/
+sed -i 's/OCNRES=400/OCNRES=500/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i 's/$CRTM_FIX/"\/lustre"/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
+sed -i 's/ORION/DOCKER/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.coupled_ic
+sed -i 's/ORION/DOCKER/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
+#sed -i 's/OCNPETS=20/OCNPETS=10/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
+cp ${ROOT_DIR}/docker/config.fv3 ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/
 
 # 
-#${GW_DIR}/workflow/setup_xml.py ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto
+#${GW_DIR}/workflow/setup_xml.py ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto
 
 # check if inputdata is existed TODO: download examples from somewhere? 
 if [[ -f ${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR}/atmos/C${GRID}/INPUT/gfs_ctrl.nc ]]; then
   echo "${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR}/atmos/C${GRID}/INPUT/gfs_ctrl.nc exists! Copy to icsdir/comrot"
   mkdir -p ${TEST_DIR}/icsdir
   cp -r ${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR} ${TEST_DIR}/icsdir
-  mkdir -p ${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/atmos/INPUT
-  cp ${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR}/atmos/C${GRID}/INPUT/* ${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/atmos/INPUT
+  mkdir -p ${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/atmos/INPUT
+  cp ${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR}/atmos/C${GRID}/INPUT/* ${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/atmos/INPUT
 else
   echo "\n Cannot find inputdata! Please check!\n\n"
   exit 1
@@ -263,7 +263,7 @@ fi
 #echo ${oGRID}
 if [[ -f ${TEST_DIR}/icsdir/${SYEAR}${SMONTH}${SDAY}${SHR}/wave/rundata/gfswave.mod_def.mx${oGRID} ]]; then
   echo "${TEST_DIR}/inputdata/${SYEAR}${SMONTH}${SDAY}${SHR}/wave/rundata/gfswave.mod_def.mx${oGRID} exists! Copy to comrot"
-  cp -r ${TEST_DIR}/icsdir/${SYEAR}${SMONTH}${SDAY}${SHR}/wave ${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/
+  cp -r ${TEST_DIR}/icsdir/${SYEAR}${SMONTH}${SDAY}${SHR}/wave ${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/
 fi
 
 # tmp fix for 100 ocn MOM_input
@@ -281,11 +281,11 @@ sed -i "s#MOM6_RESTART_SETTING='n'#MOM6_RESTART_SETTING='r'#g" ${GW_DIR}/ush/par
 # tmp fix 100 wav
 if [ "${APP}" == "S2SW" ]; then
   if [[ ("${GRID}" == "96") || ("${GRID}" == "48") ]]; then
-  sed -i 's/MEDPETS=300/#MEDPETS=300/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
-  sed -i 's/gwes_30m/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
-  sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
-  sed -i 's/reg025/reg'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.defaults.s2sw
-  sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.resources
+  sed -i 's/MEDPETS=300/#MEDPETS=300/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.defaults.s2sw
+  sed -i 's/gwes_30m/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.defaults.s2sw
+  sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.defaults.s2sw
+  sed -i 's/reg025/reg'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.defaults.s2sw
+  sed -i 's/mx025/mx'${oGRID}'/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.resources
   fi
 fi
 
@@ -293,15 +293,15 @@ fi
 if [ "${CTEST}" = true ] ; then
   if [ "${APP}" = "S2S" ]; then
     echo "turn off wav part in s2s app!"
-    sed -i 's/source $EXPDIR\/config.defaults.s2sw/#source $EXPDIR\/config.defaults.s2sw/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto/config.base
+    sed -i 's/source $EXPDIR\/config.defaults.s2sw/#source $EXPDIR\/config.defaults.s2sw/g' ${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto/config.base
   fi
 #
   set +eu
   #
   export HOMEgfs=${GW_DIR}
   export RUN_ENVIR="emc"
-  export EXPDIR="${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto"
-  export ROTDIR="${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}_norocoto"
+  export EXPDIR="${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto"
+  export ROTDIR="${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}_norocoto"
   export CDUMP="gfs"
   export CDATE="${SYEAR}${SMONTH}${SDAY}${SHR}"
   export PDY="${SYEAR}${SMONTH}${SDAY}"
@@ -313,6 +313,7 @@ if [ "${CTEST}" = true ] ; then
   . ${EXPDIR}/config.fcst
   echo "NTASKS_TOT = ${npe_fcst_gfs}"
   echo "ntasks-per-node = ${npe_node_fcst_gfs}"
+  echo "${APP}_c${GRID}_${_CASE}"
   export fcst_node=$(echo "$npe_fcst_gfs / $npe_node_fcst_gfs + 1" | bc)
   #
   [ -f ./out ] && rm out
@@ -336,8 +337,8 @@ cat > job_card<<EOF
 
 export HOMEgfs=${GW_DIR}
 export RUN_ENVIR="emc"
-export EXPDIR="${TEST_DIR}/expdir/${APP}_c${GRID}_${CASE}_norocoto" 
-export ROTDIR="${TEST_DIR}/comrot/${APP}_c${GRID}_${CASE}_norocoto"
+export EXPDIR="${TEST_DIR}/expdir/${APP}_c${GRID}_${_CASE}_norocoto" 
+export ROTDIR="${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}_norocoto"
 export CDUMP="gfs"
 export CDATE="${SYEAR}${SMONTH}${SDAY}${SHR}"
 export PDY="${SYEAR}${SMONTH}${SDAY}"
@@ -364,6 +365,61 @@ EOF
   echo $OUTPUT
 fi
 
+## check with baseline
+#load LIST_FILES for selected test case
+if [[ -f ./tests/${APP}_c${GRID}_${_CASE} ]]; then
+  source ./tests/${APP}_c${GRID}_${_CASE}
+else
+  echo "cannot find LIST FILES!"
+  exit 1
+fi
 
 #
-exit 0
+TEST_LOG="${APP}_c${GRID}_${_CASE}_comp.log"
+RUNDIR="${TEST_DIR}/comrot/${APP}_c${GRID}_${_CASE}_norocoto/gfs.${SYEAR}${SMONTH}${SDAY}/${SHR}/atmos/RERUN_RESTART"
+tol="1e-4"
+
+#
+[[ -f $TEST_LOG ]] && rm $TEST_LOG
+
+# --- test comparison
+test_status='SCUESS'
+echo "Starting check!"
+for i in ${LIST_FILES} ; do
+  echo "Checking.....$i"
+  printf '%s' " Comparing $i ....." >> ${TEST_LOG}
+
+  if [[ ! -f ${RUNDIR}/$i ]] ; then
+    echo ".......MISSING file" >> ${TEST_LOG}
+    test_status='FAIL'
+  elif [[ ! -f ./ref/${CNTL_DIR}/$i ]] ; then
+    echo ".......MISSING baseline" >> ${TEST_LOG}
+    test_status='FAIL'
+  else
+    python compare_ncfile.py ./ref/${CNTL_DIR}/$i ${RUNDIR}/$i $tol > "compare_ncfile.log" 2>&1
+
+    if [[ -s compare_ncfile.log ]]; then
+      echo "....NOT OK" >> ${TEST_LOG}
+      cat compare_ncfile.log >> ${TEST_LOG}
+      test_status='FAIL'
+    else
+      echo "....OK" >> ${TEST_LOG}
+    fi
+
+  fi
+
+  #clean
+  [[ -f compare_ncfile.log ]] && rm compare_ncfile.log
+
+done
+#
+echo "Done check ${test_name}, test_status=$test_status"
+##
+
+#
+if [[ ${test_status} == "FAIL" ]]; then
+  echo "test_status=${test_status}, Please check log file!"
+  exit 1
+else
+  exit 0
+fi

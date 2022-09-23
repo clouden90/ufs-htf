@@ -37,7 +37,7 @@ CURR_DIR=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
 echo $WORK_DIR
 
 # firt install aws-cli
-pip install numpy awscli
+pip install numpy awscli netCDF4
 #if [ -d "${HOME}/aws-cli" ]; then
 #  echo "aws-cli existed" 
 #else
@@ -388,6 +388,13 @@ else
    cd ./inputdata
    tar -zxvf 2021032306.tar.gz
    cd ..
+fi
+
+if [ -d ./ref ]; then
+   echo "./ref folder already there!"
+else
+   aws s3 cp --no-sign-request s3://my-ufs-inputdata/20220922_ref_toy.tar.gz ./
+   tar -zxvf 20220922_ref_toy.tar.gz
 fi
 
 
