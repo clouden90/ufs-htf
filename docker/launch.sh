@@ -19,13 +19,13 @@ elif [[ -d /home/builder/spack-stack ]]; then
   #
   echo "spack-stack!"
   module purge
-  module use /home/builder/spack-stack/envs/ufs-srw-dev.docker_gnu/install/modulefiles/Core
+  module use /home/builder/spack-stack/envs/ufs-wm-dev.test/install/modulefiles/Core
   module load stack-gcc
   module load stack-openmpi
   module load stack-python
   module load netcdf-c netcdf-fortran libpng jasper cmake
-  module load sp zlib hdf5 netcdf-c netcdf-fortran esmf fms bacio crtm g2 g2tmpl ip w3nco gftl-shared yafyaml mapl  nemsio sfcio sigio w3emc wgrib2 pio parallel-netcdf
-  module load nccmp prod-util
+  module load sp zlib hdf5 netcdf-c netcdf-fortran esmf fms bacio crtm g2 g2tmpl ip w3nco gftl-shared yafyaml mapl nemsio sfcio sigio w3emc wgrib2 pio
+  module load prod-util
 else
   echo "This Platform is not supported, please check!"
   exit 1
