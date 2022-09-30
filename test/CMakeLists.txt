@@ -5,6 +5,12 @@ set( case_envs
 )
 
 #
+set( tests_LISTFILEs
+  ${CMAKE_CURRENT_SOURCE_DIR}/tests/ATM_c48_toy
+  ${CMAKE_CURRENT_SOURCE_DIR}/tests/S2S_c48_toy
+)
+
+#
 set( obs_data
   ${CMAKE_CURRENT_SOURCE_DIR}/data/bal022019_post.dat 
 )
@@ -59,6 +65,9 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
       ${CMAKE_CURRENT_SOURCE_DIR}/run_trk_err.sh 
       ${CMAKE_CURRENT_BINARY_DIR}/run_trk_err.sh )
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_CURRENT_SOURCE_DIR}/compare_ncfile.py
+      ${CMAKE_CURRENT_BINARY_DIR}/compare_ncfile.py )
 
 # case env files 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/case)
@@ -67,6 +76,15 @@ foreach(FILENAME ${case_envs})
      execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
          ${FILENAME}
          ${CMAKE_CURRENT_BINARY_DIR}/case/${filename} )
+endforeach()
+
+# test list files 
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests)
+foreach(FILENAME ${tests_LISTFILEs})
+     get_filename_component(filename ${FILENAME} NAME )
+     execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink
+         ${FILENAME}
+         ${CMAKE_CURRENT_BINARY_DIR}/tests/${filename} )
 endforeach()
 
 # vrfy scripts 
