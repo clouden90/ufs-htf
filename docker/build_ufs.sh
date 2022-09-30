@@ -42,7 +42,7 @@ cmake $MAKE_OPT -DINLINE_POST=ON ..
 #
 if [[ -d /home/builder/spack-stack ]]; then
   sed -i 's/-lESMF//g' $cwd/ufs_model.fd/build/CMakeFiles/ufs_model.dir/link.txt
-  sed -i 's/\blibpioc.a\b/& \/home\/builder\/spack-stack\/envs\/ufs-srw-dev.docker_gnu\/install\/gcc\/9.4.0\/parallel-netcdf-1.12.2-r4lshlx\/lib\/libpnetcdf.so.4/' $cwd/ufs_model.fd/build/CMakeFiles/ufs_model.dir/link.txt
+  #sed -i 's/\blibpioc.a\b/& \/home\/builder\/spack-stack\/envs\/ufs-srw-dev.docker_gnu\/install\/gcc\/9.4.0\/parallel-netcdf-1.12.2-r4lshlx\/lib\/libpnetcdf.so.4/' $cwd/ufs_model.fd/build/CMakeFiles/ufs_model.dir/link.txt
 fi
 OMP_NUM_THREADS=1 make -j ${BUILD_JOBS:-4} VERBOSE=${BUILD_VERBOSE:-}
 mv ufs_model ../tests/fv3_${COMPILE_NR}.exe
