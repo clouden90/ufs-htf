@@ -35,21 +35,21 @@ if [ $? -ne 0 ]; then
 fi
 
 # staging data
-# ctest -VV -R docker_stage_ufs_data
+ctest -VV -R docker_stage_ufs_data
 
 #
-#if [ $? -ne 0 ]; then
-#   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
-#   echo "docker_stage_ufs_data FAIL"
-#   exit 1
-#fi
+if [ $? -ne 0 ]; then
+   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+   echo "docker_stage_ufs_data FAIL"
+   exit 1
+fi
 
-# ufs ATM_c48_toy
-# ctest -VV -R docker_ATM_c48_toy
+# ufs S2S_c48_toy
+ctest -VV -R docker_S2S_c48_toy
 
 #
-#if [ $? -ne 0 ]; then
-#   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
-#   echo "docker_docker_ATM_c48_toy FAIL"
-#   exit 1
-#fi
+if [ $? -ne 0 ]; then
+   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+   echo "docker_docker_S2S_c48_toy FAIL"
+   exit 1
+fi
