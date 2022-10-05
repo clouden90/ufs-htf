@@ -25,7 +25,7 @@ cd build
 cmake ..
 
 # test ufs-wm build
-ctest -VV -R docker_build_ufs
+ctest docker_build_ufs
 
 #
 if [ $? -ne 0 ]; then
@@ -35,7 +35,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # staging data
-ctest -VV -R docker_stage_ufs_data
+ctest docker_stage_ufs_data
 
 #
 if [ $? -ne 0 ]; then
@@ -45,7 +45,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # ufs S2S_c48_toy
-ctest -VV -R docker_S2S_c48_toy
+ctest docker_S2S_c48_toy
 
 #
 if [ $? -ne 0 ]; then
