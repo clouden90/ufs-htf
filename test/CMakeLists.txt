@@ -184,22 +184,22 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/inputdata)
 add_test ( NAME docker_build_ufs
            COMMAND bash build_global-workflow-docker.sh
            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(docker_build_ufs PROPERTIES TIMEOUT 3600)
+set_tests_properties(docker_build_ufs PROPERTIES TIMEOUT 1800)
 
 #
 add_test ( NAME docker_stage_ufs_data
            COMMAND bash prep-docker.sh -a 48 -o 500
            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(docker_stage_ufs_data PROPERTIES TIMEOUT 3600)
+set_tests_properties(docker_stage_ufs_data PROPERTIES TIMEOUT 1800)
 
 #
 add_test ( NAME docker_ATM_c48_toy
 	COMMAND bash run_ctest_norocoto_fcst_only-docker.sh --app=ATM --grid=48 --case=toy --ctest -v
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(docker_ATM_c48_toy PROPERTIES TIMEOUT 3600)
+set_tests_properties(docker_ATM_c48_toy PROPERTIES TIMEOUT 1800)
 
 #
 add_test ( NAME docker_S2S_c48_toy
 	COMMAND bash run_ctest_norocoto_fcst_only-docker.sh --app=S2S --grid=48 --case=toy --ctest -v
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
-set_tests_properties(docker_S2S_c48_toy PROPERTIES TIMEOUT 3600)   
+set_tests_properties(docker_S2S_c48_toy PROPERTIES TIMEOUT 1800)   

@@ -9,8 +9,6 @@ cd ${ROOT_DIR}
 
 #
 git config --global --add safe.directory /home/builder/ufs-htf
-#git branch
-#git pull
 git submodule update --init --recursive
 
 #
@@ -45,7 +43,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # ufs S2S_c48_toy
-ctest docker_S2S_c48_toy
+ctest -VV -R docker_S2S_c48_toy
 
 #
 if [ $? -ne 0 ]; then

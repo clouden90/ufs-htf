@@ -309,7 +309,7 @@ elif [ $step = "fcst" ]; then
         if [[ $DO_OCN == "YES" ]]; then
             case $OCNRES in
                 # Except for 025, these are guesses for now
-		500) export OCNPETS=1 ;;
+		500) export OCNPETS=4 ;;
                 100) export OCNPETS=20 ;;
                 050) export OCNPETS=60 ;;
                 025) export OCNPETS=220 ;;
@@ -324,7 +324,7 @@ elif [ $step = "fcst" ]; then
         if [[ $DO_ICE == "YES" ]]; then
             case $ICERES in
                 # Except for 025, these are guesses for now
-		500) export ICEPETS=1 ;;
+		500) export ICEPETS=4 ;;
                 100) export ICEPETS=10 ;;
                 050) export ICEPETS=30 ;;
                 025) export ICEPETS=120 ;;

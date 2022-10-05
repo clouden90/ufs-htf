@@ -358,6 +358,7 @@ EOF
   OUTPUT=$( grep "End fcst.sh" ./out | grep "code 0" || true )
   while [ -z "$OUTPUT" ]; do
     echo "fcst is not completed! keep trying"
+    tail -n 60 out
     sleep 30
     #OUTPUT=$(grep "End fcst.sh" ./out)
     OUTPUT=$( grep "End fcst.sh" ./out | grep "code 0" || true )
