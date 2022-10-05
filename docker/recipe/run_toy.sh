@@ -14,7 +14,7 @@ git submodule update --init --recursive
 #
 source ./docker/launch.sh
 pip3 install numpy awscli
-[[ -d /home/builder/spack-stack ]] pip3 install cmake
+[[ -d /home/builder/spack-stack ]] && pip3 install cmake
 
 #
 mkdir build && cd build
