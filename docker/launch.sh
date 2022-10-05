@@ -23,7 +23,7 @@ elif [[ -d /home/builder/spack-stack ]]; then
   module load stack-gcc
   module load stack-openmpi
   module load stack-python
-  module load netcdf-c netcdf-fortran libpng jasper cmake
+  module load netcdf-c netcdf-fortran libpng jasper
   module load sp zlib hdf5 netcdf-c netcdf-fortran esmf fms bacio crtm g2 g2tmpl ip w3nco gftl-shared yafyaml mapl nemsio sfcio sigio w3emc wgrib2 pio
   module load prod-util
 else
