@@ -26,6 +26,7 @@ elif [[ -d /home/builder/spack-stack ]]; then
   module load netcdf-c netcdf-fortran libpng jasper
   module load sp zlib hdf5 netcdf-c netcdf-fortran esmf fms bacio crtm g2 g2tmpl ip w3nco gftl-shared yafyaml mapl nemsio sfcio sigio w3emc wgrib2 pio
   module load prod-util
+  export PATH=/usr/local/lib/python3.8/dist-packages/cmake/data/bin:$PATH
 else
   echo "This Platform is not supported, please check!"
   exit 1
