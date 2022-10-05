@@ -42,8 +42,18 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
+# ufs ATM_c48_toy
+ctest -R docker_ATM_c48_toy
+
+#
+if [ $? -ne 0 ]; then
+   cat $ROOT_DIR/build/Testing/Temporary/LastTest.log
+   echo "docker_docker_ATM_c48_toy FAIL"
+   exit 1
+fi
+
 # ufs S2S_c48_toy
-ctest -VV -R docker_S2S_c48_toy
+ctest -R docker_S2S_c48_toy
 
 #
 if [ $? -ne 0 ]; then
