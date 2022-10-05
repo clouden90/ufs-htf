@@ -197,9 +197,11 @@ add_test ( NAME docker_ATM_c48_toy
 	COMMAND bash run_ctest_norocoto_fcst_only-docker.sh --app=ATM --grid=48 --case=toy --ctest -v
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
 set_tests_properties(docker_ATM_c48_toy PROPERTIES TIMEOUT 1800)
+set_tests_properties(docker_ATM_c48_toy PROPERTIES DEPENDS "docker_build_ufs;docker_stage_ufs_data")
 
 #
 add_test ( NAME docker_S2S_c48_toy
 	COMMAND bash run_ctest_norocoto_fcst_only-docker.sh --app=S2S --grid=48 --case=toy --ctest -v
            WORKING DIRECTORY ${CMAKE_BINARY_DIR}/test )
 set_tests_properties(docker_S2S_c48_toy PROPERTIES TIMEOUT 1800)   
+set_tests_properties(docker_S2S_c48_toy PROPERTIES DEPENDS "docker_build_ufs;docker_stage_ufs_data")
