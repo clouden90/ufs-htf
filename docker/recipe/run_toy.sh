@@ -23,7 +23,7 @@ cd build
 cmake ..
 
 # test ufs-wm build
-ctest docker_build_ufs
+ctest -R docker_build_ufs
 
 #
 if [ $? -ne 0 ]; then
@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # staging data
-ctest docker_stage_ufs_data
+ctest -R docker_stage_ufs_data
 
 #
 if [ $? -ne 0 ]; then
