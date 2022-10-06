@@ -1,4 +1,4 @@
-FROM clouden90/ubuntu20.04-gnu9.3.spack-stack:ufswm
+FROM clouden90/ubuntu20.04-gnu9.3.spack-stack:ufswm.openmpi
 LABEL AUTHOR clouden90
 WORKDIR /home/builder/ufs-htf
 COPY ./ ./
