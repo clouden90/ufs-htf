@@ -39,7 +39,7 @@ The UFS-HTF prototype source code is publicly available on GitHub. To download t
 
 .. code-block:: console
 
-   git clone --recurse-submodules -b doc https://github.com/clouden90/ufs-htf.git
+   git clone --recurse-submodules -b global_workflow https://github.com/clouden90/ufs-htf.git
 
 .. _CMakeHTF:
 
